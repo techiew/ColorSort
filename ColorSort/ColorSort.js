@@ -69,6 +69,8 @@ function setup() {
     runMenu.addProgressBar("Progress", 100, progressPercent);
     runMenu.addButton("Sort again", sortAgainClicked);
     runMenu.addButton("Generate new colors", generateNewClicked);
+    runMenu.addHTML("Github link", "<b> <p style='margin-top:0;margin-bottom:5px;'>Github repo:</p> </b> <a href='https://github.com/techiew/ColorSort'>github.com/techiew/ColorSort</a>");
+    runMenu.hideTitle("Github link");
 }
 
 function draw() {
