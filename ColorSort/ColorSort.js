@@ -69,6 +69,7 @@ function setup() {
     runMenu.addProgressBar("Progress", 100, progressPercent);
     runMenu.addButton("Sort again", sortAgainClicked);
     runMenu.addButton("Generate new colors", generateNewClicked);
+    runMenu.addButton("Smooth out the colors", smoothClicked);
     runMenu.addHTML("Github link", "<b> <p style='margin-top:0;margin-bottom:5px;'>Github repo:</p> </b> <a href='https://github.com/techiew/ColorSort'>github.com/techiew/ColorSort</a>");
     runMenu.hideTitle("Github link");
 }
@@ -78,11 +79,6 @@ function draw() {
 
     if(startSort) {
         let cycles = Math.ceil(numColors / throttle * speed);
-
-        progressPercent = (numColors - heapLength) / numColors * 100;
-        runMenu.setValue("Progress", progressPercent);
-        runMenu.setValue("Info", "# array accesses: " + arrayAccesses + "\n"
-                        + "# comparisons: " + comparisons);
 
         while(cycles != 0) {
 
@@ -94,6 +90,11 @@ function draw() {
         }
 
     }
+
+    progressPercent = (numColors - heapLength) / numColors * 100;
+    runMenu.setValue("Progress", progressPercent);
+    runMenu.setValue("Info", "# array accesses: " + arrayAccesses + "\n"
+                    + "# comparisons: " + comparisons);
 
     let posX = 0;
     let posY = 0;
@@ -173,6 +174,9 @@ function getSortFactor(_color) {
     arrayAccesses++;
     comparisons += 0.5;
 
+    let smoothSort = true;
+    let smoothColor = color(255, 255, 255);
+
     let r = 0;
     let g = 0;
     let b = 0;
@@ -183,14 +187,17 @@ function getSortFactor(_color) {
 
     if(sortByRed) {
         r = red(_color);
+        smoothColor = color(0, green(smoothColor), blue(smoothColor));
     }
 
     if(sortByGreen) {
         g = green(_color);
+        smoothColor = color(red(smoothColor), 0, blue(smoothColor));
     }
 
     if(sortByBlue) {
         b = blue(_color);
+        smoothColor = color(red(smoothColor), green(smoothColor), 0);
     }
 
     if(sortByHue) {
@@ -213,6 +220,32 @@ function getSortFactor(_color) {
     }
 
     return r + g + b + h + s + br - si;
+}
+
+function smoothPass() {
+
+    for(let i = 0; i < colors.length; i++) {
+        let c1 = color(0, 0, 0);
+        let c2 = color(0, 0, 0);
+        let c3 = color(0, 0, 0);
+        let c4 = color(0, 0, 0);
+        let c5 = color(0, 0, 0);
+
+        let rowLength = Math.ceil(windowWidth / size);
+
+        c1 = colors[i];
+        if(i - 1 > 0) c2 = colors[i - 1];
+        if(i + 1 < colors.length) c3 = colors[i + 1];
+        if(i + rowLength < colors.length) c4 = colors[i + rowLength];
+        if(i - rowLength > 0) c5 = colors[i - rowLength];
+
+        let avgR = (red(c1)  + red(c2) + red(c3) + red(c4) + red(c5)) / 5;
+        let avgG = (green(c1) + green(c2) + green(c3) + green(c4) + green(c5)) / 5;
+        let avgB = (blue(c1) + blue(c2) + blue(c3) + blue(c4) + blue(c5)) / 5;
+
+        colors[i] = color(avgR, avgG, avgB);
+    }
+
 }
 
 // Shamelessly stolen from Stackoverflow: https://stackoverflow.com/a/47337678/11562557

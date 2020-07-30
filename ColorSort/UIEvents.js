@@ -94,3 +94,11 @@ function generateNewClicked(button) {
     runMenu.hide();
     startSort = false;
 }
+
+function smoothClicked(button) {
+
+    for(let i = 0; i < 5; i++) {
+        smoothPass();
+    }
+
+}
