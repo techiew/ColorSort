@@ -174,9 +174,6 @@ function getSortFactor(_color) {
     arrayAccesses++;
     comparisons += 0.5;
 
-    let smoothSort = true;
-    let smoothColor = color(255, 255, 255);
-
     let r = 0;
     let g = 0;
     let b = 0;
@@ -187,17 +184,14 @@ function getSortFactor(_color) {
 
     if(sortByRed) {
         r = red(_color);
-        smoothColor = color(0, green(smoothColor), blue(smoothColor));
     }
 
     if(sortByGreen) {
         g = green(_color);
-        smoothColor = color(red(smoothColor), 0, blue(smoothColor));
     }
 
     if(sortByBlue) {
         b = blue(_color);
-        smoothColor = color(red(smoothColor), green(smoothColor), 0);
     }
 
     if(sortByHue) {
