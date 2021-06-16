@@ -33,6 +33,7 @@ var sortBySimilarity = false;
 var sortBySimilarityColor = "#007efd";
 
 var speed = 1;
+var removeGrid = false;
 
 let infoText = "";
 let progressPercent = 0;
@@ -70,13 +71,14 @@ function setup() {
     runMenu.addButton("Sort again", sortAgainClicked);
     runMenu.addButton("Generate new colors", generateNewClicked);
     runMenu.addButton("Smooth out the colors", smoothClicked);
+    runMenu.addButton("Toggle grid", toggleGridClicked);
     runMenu.addHTML("Github link", "<b> <p style='margin-top:0;margin-bottom:5px;'>Github repo:</p> </b> <a href='https://github.com/techiew/ColorSort'>github.com/techiew/ColorSort</a>");
     runMenu.hideTitle("Github link");
 }
 
 function draw() {
     background(0);
-
+	
     if(startSort) {
         let cycles = Math.ceil(numColors / throttle * speed);
 
@@ -101,7 +103,13 @@ function draw() {
 
     for(let i = 0; i < colors.length; i++) {
         fill(colors[i]);
-        rect(posX, posY, size, size);
+		
+		if(removeGrid) {
+			rect(posX, posY, size + 1, size + 1);
+		} else {
+			rect(posX, posY, size, size);
+		}
+		
         posX += size;
 
         if(posX >= windowWidth) {

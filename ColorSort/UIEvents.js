@@ -102,3 +102,7 @@ function smoothClicked(button) {
     }
 
 }
+
+function toggleGridClicked(button) {
+	removeGrid = removeGrid ? false : true;
+}
